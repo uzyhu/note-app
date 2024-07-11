@@ -48,6 +48,22 @@ app.post("/notes", (req, res) => {
   });
 });
 
+app.put("/notes/:id", (req, res) => {
+  console.log("in");
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const query =
+    "UPDATE notes SET title = ?, content = ?, updatedAt = NOW() WHERE id = ?";
+  connection.query(query, [title, content, id], (err, results) => {
+    if (err) {
+      console.error("Error updating note:", err);
+      res.status(500).send("Error updating note");
+      return;
+    }
+    res.status(200).send("Note updated successfully");
+  });
+});
+
 app.delete("/notes/:id", (req, res) => {
   const { id } = req.params;
   const query = "DELETE FROM notes WHERE id = ?";
@@ -60,6 +76,6 @@ app.delete("/notes/:id", (req, res) => {
   });
 });
 
-app.listen(8080, () => {
-  console.log(`Server running on port 8080`);
+app.listen(3000, () => {
+  console.log(`Server running on port 3000`);
 });
